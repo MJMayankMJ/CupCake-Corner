@@ -4,5 +4,55 @@
 //
 //  Created by Mayank Jangid on 10/16/24.
 //
+import SwiftUI
 
-import Foundation
+@Observable
+class Order : Codable{
+    static let types = ["Vanilla", "Strawberry", "Chocolate", "Rainbow"]
+
+    var type = 0
+    var quantity = 3
+
+    var specialRequestEnabled = false{
+        didSet{
+            if specialRequestEnabled == false{
+                extraFrosting = false
+                addSprinkles = false
+            }
+        }
+    }
+    var extraFrosting = false
+    var addSprinkles = false
+    
+    var name = ""
+    var streetAddress = ""
+    var city = ""
+    var zip = ""
+    
+    var hasValidAddress: Bool{
+        if streetAddress.isEmpty || city.isEmpty || zip.isEmpty || name.isEmpty{
+            return false
+        }
+        return true
+    }
+    
+    var cost: Decimal {
+        //per cake base price
+        var cost = Decimal(quantity) * 2
+
+        // as aray increases the complexity in cake increases thus the cost increases
+        cost += Decimal(type) / 2
+
+        // $1/cake for extra frosting
+        if extraFrosting {
+            cost += Decimal(quantity)
+        }
+
+        // $0.50/cake for sprinkles
+        if addSprinkles {
+            cost += Decimal(quantity) / 2
+        }
+
+        return cost
+    }
+}
