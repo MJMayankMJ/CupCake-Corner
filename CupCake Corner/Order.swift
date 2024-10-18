@@ -38,13 +38,14 @@ class Order : Codable{
     var extraFrosting = false
     var addSprinkles = false
     
-    var name = ""
-    var streetAddress = ""
-    var city = ""
-    var zip = ""
+    // first we'll check thro init if there is address stored in user default or not
+    var name : String
+    var streetAddress : String
+    var city : String
+    var zip : String
     
     var hasValidAddress: Bool{
-        if streetAddress.isEmpty || city.isEmpty || zip.isEmpty || name.isEmpty{
+        if streetAddress.trimmingCharacters(in: .whitespaces).isEmpty || city.trimmingCharacters(in: .whitespaces).isEmpty || zip.trimmingCharacters(in: .whitespaces).isEmpty || name.trimmingCharacters(in: .whitespaces).isEmpty{
             return false
         }
         return true
@@ -68,5 +69,20 @@ class Order : Codable{
         }
 
         return cost
+    }
+    init(){
+        if let data = UserDefaults.standard.data(forKey: "Address") {
+            if let decodedData = try? JSONDecoder().decode([String].self, from: data) {
+                name = decodedData[0]
+                streetAddress = decodedData[1]
+                city = decodedData[2]
+                zip = decodedData[3]
+                return
+            }
+        }
+        name = ""
+        streetAddress = ""
+        city = ""
+        zip = ""
     }
 }

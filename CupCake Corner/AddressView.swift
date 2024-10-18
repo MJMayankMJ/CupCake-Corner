@@ -23,6 +23,13 @@ struct AddressView: View {
             Section{
                 NavigationLink("Check Out"){
                     CheckoutView(order: order)
+                        .onAppear(){
+                            let addressData = [order.name, order.streetAddress, order.city, order.zip]
+                            if let encoded = try? JSONEncoder().encode(addressData){
+                                UserDefaults.standard.set(addressData, forKey: "Address")
+                                print("Address items are saved to user deafult")
+                            }
+                        }
                 }
             }
             .disabled(order.hasValidAddress == false)
