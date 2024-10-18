@@ -8,6 +8,20 @@ import SwiftUI
 
 @Observable
 class Order : Codable{
+    enum CodingKeys: String, CodingKey {
+        case _type = "type"
+        case _quantity = "quantity"
+        case _specialRequestEnabled = "specialRequestEnabled"
+        case _extraFrosting = "extraFrosting"
+        case _addSprinkles = "addSprinkles"
+        case _name = "name"
+        case _city = "city"
+        case _streetAddress = "streetAddress"
+        case _zip = "zip"
+        // this is done so when u send encoded data to server the json contains type instead of _type, etc...
+        //this is not a problem here cz the sites sends backs the same data and u store in _type but in real servers ---> name matters
+    }
+    
     static let types = ["Vanilla", "Strawberry", "Chocolate", "Rainbow"]
 
     var type = 0
